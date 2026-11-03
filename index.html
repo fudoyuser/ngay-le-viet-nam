@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lịch Ngày Lễ Việt Nam</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Các ngày lễ lớn quốc tế, Việt Nam và ngày truyền thống các cơ quan nhà nước Việt Nam, kèm link nguồn chính thức.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif+Display:wght@600;800&display=swap">
+<style>
+/* Layout: tờ lịch bloc — cột số ngày lớn bên trái, nội dung bên phải; nhóm theo tháng, có bộ lọc dính trên đầu */
+:root{
+  --paper:#fbfaf7; --sheet:#ffffff; --ink:#1d1f24; --muted:#5f6470; --rule:#e4e1da;
+  --red:#c8102e; --red-soft:#fbe9ec; --gold:#9a6b00; --gold-soft:#f8efd9; --blue:#1f5fa8; --blue-soft:#e6eef8;
+  --display:"Noto Serif Display", "Noto Serif", Georgia, serif;
+  --body:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15161a; --sheet:#1d1f24; --ink:#ecebe7; --muted:#a3a7b1; --rule:#30333a;
+  --red:#ff5a6e; --red-soft:#3a1d22; --gold:#e0b552; --gold-soft:#332a16; --blue:#7fb0ec; --blue-soft:#1b2a3d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#15161a; --sheet:#1d1f24; --ink:#ecebe7; --muted:#a3a7b1; --rule:#30333a;
+  --red:#ff5a6e; --red-soft:#3a1d22; --gold:#e0b552; --gold-soft:#332a16; --blue:#7fb0ec; --blue-soft:#1b2a3d; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:880px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+header h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,42px);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+header h1 span{color:var(--red)}
+header p{margin:0;color:var(--muted);max-width:62ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:14px;font-size:13px;color:var(--muted)}
+.legend b{font-weight:600;color:var(--ink)}
+
+.next{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.next .c{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;min-width:0}
+.next .c .in{font-size:12px;letter-spacing:.04em;text-transform:uppercase;color:var(--red);font-weight:600}
+.next .c .n{font-weight:600;margin-top:2px;line-height:1.35}
+.next .c .dt{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.next h2{grid-column:1/-1;margin:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);padding-block:12px;margin-top:20px;border-bottom:1px solid var(--rule);display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.chip{font:inherit;font-size:14px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip:focus-visible,#q:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#q{font:inherit;font-size:14px;flex:1 1 180px;min-width:0;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);padding:7px 12px;border-radius:8px}
+.count{font-size:13px;color:var(--muted);width:100%}
+
+section.m h3{font-family:var(--display);font-weight:600;font-size:22px;margin:28px 0 6px;display:flex;align-items:baseline;gap:10px}
+section.m h3 small{font-family:var(--body);font-size:13px;color:var(--muted);font-weight:400}
+ol{list-style:none;margin:0;padding:0}
+li.e{display:grid;grid-template-columns:64px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--rule)}
+.day{text-align:center;font-variant-numeric:tabular-nums}
+.day .d{font-family:var(--display);font-weight:800;font-size:34px;line-height:1}
+.day .mo{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+li.off .day .d{color:var(--red)}
+.body{min-width:0}
+.t{font-weight:600;font-size:16px;line-height:1.35}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:5px 0 4px}
+.tag{font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:4px}
+.tag.qt{background:var(--blue-soft);color:var(--blue)}
+.tag.vn{background:var(--red-soft);color:var(--red)}
+.tag.cq{background:var(--gold-soft);color:var(--gold)}
+.tag.off{background:var(--red);color:var(--sheet)}
+.tag.al{border:1px solid var(--rule);color:var(--muted)}
+.note{color:var(--muted);font-size:14px;margin:0}
+.links{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-size:14px}
+.links a{color:var(--blue);text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--blue) 35%,transparent);overflow-wrap:anywhere}
+.links a:hover{border-bottom-color:var(--blue)}
+.empty{padding:32px 0;color:var(--muted)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+footer p{margin:0 0 6px;max-width:70ch}
+footer a{color:var(--blue)}
+@media (max-width:480px){li.e{grid-template-columns:48px 1fr;gap:10px}.day .d{font-size:28px}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Lịch ngày lễ <span>Việt Nam</span> &amp; quốc tế</h1>
+    <p>Ngày lễ lớn quốc tế, ngày lễ và kỷ niệm của Việt Nam, cùng ngày truyền thống các bộ, ngành, cơ quan nhà nước. Mỗi ngày kèm link đến trang chính thức của cơ quan liên quan hoặc Wikipedia tiếng Việt.</p>
+    <div class="legend">
+      <span><b>Số đỏ</b> = ngày nghỉ lễ có hưởng lương (Điều 112 Bộ luật Lao động 2019)</span>
+      <span><b>ÂL</b> = âm lịch</span>
+    </div>
+  </header>
+
+  <div class="next" id="next" aria-live="polite"></div>
+
+  <div class="bar" role="search">
+    <button class="chip" type="button" id="f-all" data-f="all" aria-pressed="true">Tất cả</button>
+    <button class="chip" type="button" id="f-qt" data-f="qt" aria-pressed="false">Quốc tế</button>
+    <button class="chip" type="button" id="f-vn" data-f="vn" aria-pressed="false">Việt Nam</button>
+    <button class="chip" type="button" id="f-cq" data-f="cq" aria-pressed="false">Cơ quan nhà nước</button>
+    <button class="chip" type="button" id="f-off" data-f="off" aria-pressed="false">Ngày nghỉ</button>
+    <input id="q" type="search" placeholder="Tìm ngày lễ, cơ quan…" aria-label="Tìm ngày lễ">
+    <div class="count" id="count"></div>
+  </div>
+
+  <main id="list"></main>
+
+  <footer>
+    <p>Link “Wikipedia” mở trang tìm kiếm Wikipedia tiếng Việt và tự chuyển tới bài viết khi có tên trùng khớp. Link cơ quan dẫn tới cổng thông tin chính thức; danh sách ngày quốc tế đầy đủ xem tại <a href="https://www.un.org/en/observances/list-days-weeks" target="_blank" rel="noopener">Liên Hợp Quốc</a>.</p>
+    <p>Một số bộ, ngành đã sáp nhập năm 2025 (ví dụ Giao thông vận tải vào Bộ Xây dựng, Thông tin và Truyền thông vào Bộ Khoa học và Công nghệ); ngày truyền thống ngành vẫn được giữ.</p>
+  </footer>
+</div>
+
+<script>
+(function(){
+const W=t=>["Wikipedia","https://vi.wikipedia.org/w/index.php?search="+encodeURIComponent(t)+"&go=Go"];
+const UN=(s,l)=>[l||"Liên Hợp Quốc","https://www.un.org/en/observances/"+s];
+const S=(l,u)=>[l,u];
+
+/* d: "MM-DD" dương lịch; lunar: [tháng, ngày] âm lịch + solar theo năm */
+const E=[
+ // ===== Việt Nam: nghỉ lễ & kỷ niệm lớn =====
+ {d:"01-01",n:"Tết Dương lịch",c:"vn",off:1,note:"Nghỉ 1 ngày.",l:[W("Tết Dương lịch"),S("Cổng TTĐT Chính phủ","https://chinhphu.vn")]},
+ {d:"01-06",n:"Ngày Tổng tuyển cử bầu Quốc hội đầu tiên (1946)",c:"vn",l:[S("Quốc hội Việt Nam","https://quochoi.vn"),W("Tổng tuyển cử Việt Nam 1946")]},
+ {lunar:[1,1],solar:{2026:"02-17",2027:"02-06"},n:"Tết Nguyên đán",c:"vn",off:1,note:"Nghỉ 5 ngày theo luật; lịch nghỉ cụ thể do Thủ tướng quyết định hằng năm.",l:[W("Tết Nguyên Đán"),S("Cổng TTĐT Chính phủ","https://chinhphu.vn")]},
+ {d:"02-03",n:"Ngày thành lập Đảng Cộng sản Việt Nam (1930)",c:"vn",l:[S("Báo điện tử Đảng Cộng sản","https://dangcongsan.vn"),W("Đảng Cộng sản Việt Nam")]},
+ {d:"03-26",n:"Ngày thành lập Đoàn TNCS Hồ Chí Minh (1931)",c:"vn",l:[S("Trung ương Đoàn","https://doanthanhnien.vn"),W("Đoàn Thanh niên Cộng sản Hồ Chí Minh")]},
+ {lunar:[3,10],solar:{2026:"04-26"},n:"Giỗ Tổ Hùng Vương",c:"vn",off:1,note:"Nghỉ 1 ngày.",l:[W("Giỗ Tổ Hùng Vương")]},
+ {d:"04-30",n:"Ngày Giải phóng miền Nam, thống nhất đất nước (1975)",c:"vn",off:1,note:"Nghỉ 1 ngày.",l:[W("Sự kiện 30 tháng 4 năm 1975")]},
+ {d:"05-01",n:"Ngày Quốc tế Lao động",c:"vn",off:1,note:"Nghỉ 1 ngày. Ngày lễ quốc tế, cũng là ngày nghỉ ở Việt Nam.",l:[W("Ngày Quốc tế Lao động"),S("Tổng Liên đoàn Lao động VN","https://congdoan.vn")]},
+ {d:"05-07",n:"Chiến thắng Điện Biên Phủ (1954)",c:"vn",l:[W("Chiến dịch Điện Biên Phủ")]},
+ {d:"05-15",n:"Ngày thành lập Đội TNTP Hồ Chí Minh (1941)",c:"vn",l:[W("Đội Thiếu niên Tiền phong Hồ Chí Minh")]},
+ {d:"05-19",n:"Ngày sinh Chủ tịch Hồ Chí Minh (1890)",c:"vn",l:[W("Hồ Chí Minh")]},
+ {d:"06-28",n:"Ngày Gia đình Việt Nam",c:"vn",l:[S("Bộ VH-TT&DL","https://bvhttdl.gov.vn"),W("Ngày Gia đình Việt Nam")]},
+ {d:"07-27",n:"Ngày Thương binh – Liệt sĩ (1947)",c:"vn",l:[S("Bộ Nội vụ","https://moha.gov.vn"),W("Ngày Thương binh Liệt sĩ")]},
+ {d:"07-28",n:"Ngày thành lập Công đoàn Việt Nam (1929)",c:"vn",l:[S("Tổng Liên đoàn Lao động VN","https://congdoan.vn")]},
+ {d:"08-19",n:"Cách mạng Tháng Tám thành công (1945)",c:"vn",l:[W("Cách mạng Tháng Tám")]},
+ {d:"09-02",n:"Quốc khánh nước CHXHCN Việt Nam (1945)",c:"vn",off:1,note:"Nghỉ 2 ngày: 2/9 và 1 ngày liền kề trước hoặc sau.",l:[W("Quốc khánh Việt Nam"),S("Cổng TTĐT Chính phủ","https://chinhphu.vn")]},
+ {d:"10-10",n:"Ngày Giải phóng Thủ đô (1954)",c:"vn",l:[W("Giải phóng Thủ đô")]},
+ {d:"10-13",n:"Ngày Doanh nhân Việt Nam",c:"vn",l:[W("Ngày Doanh nhân Việt Nam")]},
+ {d:"10-14",n:"Ngày thành lập Hội Nông dân Việt Nam (1930)",c:"vn",l:[S("Hội Nông dân Việt Nam","https://hoinongdan.org.vn")]},
+ {d:"10-15",n:"Ngày truyền thống Hội LHTN Việt Nam (1956)",c:"vn",l:[W("Hội Liên hiệp Thanh niên Việt Nam")]},
+ {d:"10-20",n:"Ngày Phụ nữ Việt Nam (1930)",c:"vn",l:[S("Hội LHPN Việt Nam","https://hoilhpn.org.vn"),W("Ngày Phụ nữ Việt Nam")]},
+ {d:"11-18",n:"Ngày thành lập Mặt trận Tổ quốc / Ngày hội Đại đoàn kết toàn dân tộc (1930)",c:"vn",l:[S("Mặt trận Tổ quốc VN","https://mattran.org.vn"),W("Mặt trận Tổ quốc Việt Nam")]},
+ {d:"11-20",n:"Ngày Nhà giáo Việt Nam",c:"vn",l:[S("Bộ Giáo dục và Đào tạo","https://moet.gov.vn"),W("Ngày Nhà giáo Việt Nam")]},
+ {d:"11-23",n:"Ngày Di sản Văn hóa Việt Nam",c:"vn",l:[S("Bộ VH-TT&DL","https://bvhttdl.gov.vn")]},
+ {d:"12-06",n:"Ngày truyền thống Hội Cựu chiến binh Việt Nam (1989)",c:"vn",l:[W("Hội Cựu chiến binh Việt Nam")]},
+ {d:"12-19",n:"Ngày Toàn quốc kháng chiến (1946)",c:"vn",l:[W("Toàn quốc kháng chiến")]},
+ {d:"12-22",n:"Ngày thành lập Quân đội nhân dân Việt Nam (1944) – Ngày hội Quốc phòng toàn dân",c:"vn",l:[S("Bộ Quốc phòng","https://mod.gov.vn"),W("Quân đội nhân dân Việt Nam")]},
+
+ // ===== Cơ quan nhà nước, bộ, ngành =====
+ {d:"02-16",n:"Ngày truyền thống ngành Bảo hiểm xã hội Việt Nam",c:"cq",l:[S("Bảo hiểm xã hội VN","https://baohiemxahoi.gov.vn")]},
+ {d:"02-27",n:"Ngày Thầy thuốc Việt Nam – ngành Y tế (1955)",c:"cq",l:[S("Bộ Y tế","https://moh.gov.vn"),W("Ngày Thầy thuốc Việt Nam")]},
+ {d:"03-03",n:"Ngày truyền thống Bộ đội Biên phòng (1959) – Ngày Biên phòng toàn dân",c:"cq",l:[S("Báo Biên phòng","https://bienphong.com.vn"),W("Bộ đội Biên phòng Việt Nam")]},
+ {d:"03-27",n:"Ngày Thể thao Việt Nam (1946)",c:"cq",l:[S("Bộ VH-TT&DL","https://bvhttdl.gov.vn"),W("Ngày Thể thao Việt Nam")]},
+ {d:"03-28",n:"Ngày truyền thống Dân quân tự vệ (1935)",c:"cq",l:[S("Bộ Quốc phòng","https://mod.gov.vn"),W("Dân quân tự vệ Việt Nam")]},
+ {d:"04-01",n:"Ngày truyền thống Kho bạc Nhà nước (1990)",c:"cq",l:[S("Kho bạc Nhà nước","https://vst.mof.gov.vn")]},
+ {d:"04-21",n:"Ngày Sách và Văn hóa đọc Việt Nam",c:"cq",l:[S("Bộ VH-TT&DL","https://bvhttdl.gov.vn")]},
+ {d:"04-29",n:"Ngày truyền thống ngành Xây dựng (1958)",c:"cq",l:[S("Bộ Xây dựng","https://moc.gov.vn")]},
+ {d:"05-06",n:"Ngày thành lập Ngân hàng Nhà nước Việt Nam (1951)",c:"cq",l:[S("Ngân hàng Nhà nước","https://sbv.gov.vn"),W("Ngân hàng Nhà nước Việt Nam")]},
+ {d:"05-07",n:"Ngày truyền thống Hải quân nhân dân Việt Nam (1955)",c:"cq",l:[W("Hải quân nhân dân Việt Nam")]},
+ {d:"05-14",n:"Ngày truyền thống ngành Công Thương (1951)",c:"cq",l:[S("Bộ Công Thương","https://moit.gov.vn")]},
+ {d:"05-18",n:"Ngày Khoa học và Công nghệ Việt Nam",c:"cq",l:[S("Bộ Khoa học và Công nghệ","https://mst.gov.vn"),W("Ngày Khoa học và Công nghệ Việt Nam")]},
+ {d:"06-06",n:"Ngày Người cao tuổi Việt Nam",c:"cq",l:[W("Hội Người cao tuổi Việt Nam")]},
+ {d:"06-21",n:"Ngày Báo chí Cách mạng Việt Nam (1925)",c:"cq",l:[W("Ngày Báo chí Cách mạng Việt Nam")]},
+ {d:"07-01",n:"Ngày Bảo hiểm y tế Việt Nam",c:"cq",l:[S("Bảo hiểm xã hội VN","https://baohiemxahoi.gov.vn")]},
+ {d:"07-11",n:"Ngày truyền thống Kiểm toán Nhà nước (1994)",c:"cq",l:[S("Kiểm toán Nhà nước","https://sav.gov.vn"),W("Kiểm toán Nhà nước Việt Nam")]},
+ {d:"07-26",n:"Ngày thành lập Viện Kiểm sát nhân dân (1960)",c:"cq",l:[S("VKSND tối cao","https://vksndtc.gov.vn"),W("Viện kiểm sát nhân dân tối cao (Việt Nam)")]},
+ {d:"08-15",n:"Ngày truyền thống ngành Bưu điện, Thông tin và Truyền thông (1945)",c:"cq",l:[S("Bộ Khoa học và Công nghệ","https://mst.gov.vn")]},
+ {d:"08-19",n:"Ngày truyền thống Công an nhân dân (1945) – Ngày hội Toàn dân bảo vệ an ninh Tổ quốc",c:"cq",l:[S("Bộ Công an","https://bocongan.gov.vn"),W("Công an nhân dân Việt Nam")]},
+ {d:"08-28",n:"Ngày truyền thống ngành Ngoại giao (1945)",c:"cq",l:[S("Bộ Ngoại giao","https://mofa.gov.vn")]},
+ {d:"08-28",n:"Ngày truyền thống ngành Tài chính (1945)",c:"cq",l:[S("Bộ Tài chính","https://mof.gov.vn")]},
+ {d:"08-28",n:"Ngày truyền thống ngành Tư pháp (1945)",c:"cq",l:[S("Bộ Tư pháp","https://moj.gov.vn")]},
+ {d:"08-28",n:"Ngày truyền thống ngành Nội vụ (1945)",c:"cq",l:[S("Bộ Nội vụ","https://moha.gov.vn")]},
+ {d:"08-28",n:"Ngày truyền thống ngành Giao thông vận tải (1945)",c:"cq",l:[S("Bộ Xây dựng","https://moc.gov.vn")]},
+ {d:"08-28",n:"Ngày truyền thống Cảnh sát biển Việt Nam (1998)",c:"cq",l:[W("Cảnh sát biển Việt Nam")]},
+ {d:"09-07",n:"Ngày thành lập Đài Tiếng nói Việt Nam (1945)",c:"cq",l:[S("VOV","https://vov.vn"),W("Đài Tiếng nói Việt Nam")]},
+ {d:"09-07",n:"Ngày thành lập Đài Truyền hình Việt Nam (1970)",c:"cq",l:[S("VTV","https://vtv.vn"),W("Đài Truyền hình Việt Nam")]},
+ {d:"09-10",n:"Ngày truyền thống Hải quan Việt Nam (1945)",c:"cq",l:[S("Hải quan Việt Nam","https://customs.gov.vn")]},
+ {d:"09-13",n:"Ngày truyền thống Tòa án nhân dân (1945)",c:"cq",l:[S("Tòa án nhân dân tối cao","https://toaan.gov.vn"),W("Tòa án nhân dân tối cao (Việt Nam)")]},
+ {d:"09-15",n:"Ngày thành lập Thông tấn xã Việt Nam (1945)",c:"cq",l:[S("TTXVN","https://vnanet.vn"),W("Thông tấn xã Việt Nam")]},
+ {d:"10-04",n:"Ngày Toàn dân phòng cháy và chữa cháy",c:"cq",l:[S("Bộ Công an","https://bocongan.gov.vn")]},
+ {d:"10-10",n:"Ngày Chuyển đổi số quốc gia",c:"cq",l:[S("Bộ Khoa học và Công nghệ","https://mst.gov.vn")]},
+ {d:"10-22",n:"Ngày truyền thống Quân chủng Phòng không – Không quân (1963)",c:"cq",l:[W("Quân chủng Phòng không – Không quân")]},
+ {d:"11-09",n:"Ngày Pháp luật Việt Nam",c:"cq",l:[S("Bộ Tư pháp","https://moj.gov.vn"),W("Ngày Pháp luật Việt Nam")]},
+ {d:"11-14",n:"Ngày truyền thống ngành Nông nghiệp (1945)",c:"cq",l:[S("Bộ Nông nghiệp và Môi trường","https://mae.gov.vn")]},
+ {d:"11-23",n:"Ngày truyền thống ngành Thanh tra (1945)",c:"cq",l:[S("Thanh tra Chính phủ","https://thanhtra.gov.vn")]},
+ {d:"12-26",n:"Ngày Dân số Việt Nam",c:"cq",l:[S("Bộ Y tế","https://moh.gov.vn")]},
+
+ // ===== Quốc tế =====
+ {d:"02-14",n:"Lễ Tình nhân (Valentine)",c:"qt",l:[W("Ngày Valentine")]},
+ {d:"02-21",n:"Ngày Quốc tế Tiếng mẹ đẻ",c:"qt",l:[UN("mother-language-day")]},
+ {d:"03-08",n:"Ngày Quốc tế Phụ nữ",c:"qt",l:[UN("womens-day"),W("Ngày Quốc tế Phụ nữ")]},
+ {d:"03-20",n:"Ngày Quốc tế Hạnh phúc",c:"qt",l:[UN("happiness-day")]},
+ {d:"03-22",n:"Ngày Nước thế giới",c:"qt",l:[UN("water-day")]},
+ {d:"04-07",n:"Ngày Sức khỏe thế giới",c:"qt",l:[S("WHO","https://www.who.int/campaigns/world-health-day")]},
+ {d:"04-22",n:"Ngày Trái Đất",c:"qt",l:[UN("earth-day")]},
+ {d:"04-23",n:"Ngày Sách và Bản quyền thế giới",c:"qt",l:[S("UNESCO","https://www.unesco.org/en/days/world-book-and-copyright")]},
+ {d:"05-31",n:"Ngày Thế giới không thuốc lá",c:"qt",l:[S("WHO","https://www.who.int/campaigns/world-no-tobacco-day")]},
+ {d:"06-01",n:"Ngày Quốc tế Thiếu nhi",c:"qt",l:[W("Ngày Quốc tế Thiếu nhi")]},
+ {d:"06-05",n:"Ngày Môi trường thế giới",c:"qt",l:[UN("environment-day")]},
+ {d:"06-08",n:"Ngày Đại dương thế giới",c:"qt",l:[UN("oceans-day")]},
+ {d:"06-20",n:"Ngày Người tị nạn thế giới",c:"qt",l:[UN("refugee-day")]},
+ {d:"07-11",n:"Ngày Dân số thế giới",c:"qt",l:[UN("world-population-day")]},
+ {d:"08-12",n:"Ngày Quốc tế Thanh niên",c:"qt",l:[UN("youth-day")]},
+ {d:"09-21",n:"Ngày Quốc tế Hòa bình",c:"qt",l:[UN("international-day-peace")]},
+ {d:"10-01",n:"Ngày Quốc tế Người cao tuổi",c:"qt",l:[UN("older-persons-day")]},
+ {d:"10-05",n:"Ngày Nhà giáo thế giới",c:"qt",l:[S("UNESCO","https://www.unesco.org/en/days/teachers")]},
+ {d:"10-10",n:"Ngày Sức khỏe tâm thần thế giới",c:"qt",l:[S("WHO","https://www.who.int/campaigns/world-mental-health-day")]},
+ {d:"10-16",n:"Ngày Lương thực thế giới",c:"qt",l:[S("FAO","https://www.fao.org/world-food-day")]},
+ {d:"10-24",n:"Ngày Liên Hợp Quốc",c:"qt",l:[UN("un-day")]},
+ {d:"11-20",n:"Ngày Trẻ em thế giới",c:"qt",l:[UN("world-childrens-day")]},
+ {d:"12-01",n:"Ngày Thế giới phòng chống AIDS",c:"qt",l:[UN("world-aids-day")]},
+ {d:"12-03",n:"Ngày Quốc tế Người khuyết tật",c:"qt",l:[UN("day-of-persons-with-disabilities")]},
+ {d:"12-10",n:"Ngày Nhân quyền",c:"qt",l:[UN("human-rights-day")]},
+ {d:"12-25",n:"Lễ Giáng sinh",c:"qt",l:[W("Lễ Giáng Sinh")]}
+];
+
+const CAT={qt:"Quốc tế",vn:"Việt Nam",cq:"Cơ quan nhà nước"};
+const MONTH=["Tháng Một","Tháng Hai","Tháng Ba","Tháng Tư","Tháng Năm","Tháng Sáu","Tháng Bảy","Tháng Tám","Tháng Chín","Tháng Mười","Tháng Mười Một","Tháng Mười Hai"];
+const today=new Date(); today.setHours(0,0,0,0);
+const Y=today.getFullYear();
+
+/* Ngày dương để xếp vào tháng: lunar dùng ngày dương năm nay nếu có */
+E.forEach(e=>{
+  if(e.lunar){const s=e.solar[Y]||e.solar[Y+1]||Object.values(e.solar)[0]; e.sortKey=s;}
+  else e.sortKey=e.d;
+});
+function nextDate(e){
+  if(e.lunar){
+    for(const y of [Y,Y+1]){const s=e.solar[y]; if(s){const dt=new Date(y,+s.slice(0,2)-1,+s.slice(3));if(dt>=today)return dt;}}
+    return null;
+  }
+  let dt=new Date(Y,+e.d.slice(0,2)-1,+e.d.slice(3));
+  if(dt<today) dt=new Date(Y+1,+e.d.slice(0,2)-1,+e.d.slice(3));
+  return dt;
+}
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt=dt=>dt.toLocaleDateString("vi-VN",{weekday:"long",day:"numeric",month:"numeric",year:"numeric"});
+
+function renderNext(){
+  const up=E.map(e=>({e,dt:nextDate(e)})).filter(x=>x.dt).sort((a,b)=>a.dt-b.dt).slice(0,4);
+  document.getElementById("next").innerHTML='<h2>Sắp tới</h2>'+up.map(({e,dt})=>{
+    const days=Math.round((dt-today)/864e5);
+    return `<div class="c"><div class="in">${days===0?"Hôm nay":"Còn "+days+" ngày"}</div><div class="n">${esc(e.n)}</div><div class="dt">${fmt(dt)}</div></div>`;
+  }).join("");
+}
+
+let filter="all";
+function render(){
+  const q=document.getElementById("q").value.trim().toLowerCase();
+  const items=E.filter(e=>(filter==="all"||(filter==="off"?e.off:e.c===filter))&&(!q||(e.n+" "+(e.note||"")+" "+e.l.map(x=>x[0]).join(" ")).toLowerCase().includes(q)))
+    .sort((a,b)=>a.sortKey.localeCompare(b.sortKey));
+  document.getElementById("count").textContent=items.length+" ngày";
+  const byM={};items.forEach(e=>{(byM[+e.sortKey.slice(0,2)]??=[]).push(e)});
+  const html=Object.keys(byM).sort((a,b)=>a-b).map(m=>`<section class="m"><h3>${MONTH[m-1]}<small>${byM[m].length} ngày</small></h3><ol>`+byM[m].map(e=>{
+    const day=e.lunar?e.lunar[1]+"/"+e.lunar[0]:String(+e.d.slice(3));
+    const mo=e.lunar?"ÂL":"thg "+(+e.d.slice(0,2));
+    const solar=e.lunar?Object.entries(e.solar).map(([y,s])=>`${+s.slice(3)}/${+s.slice(0,2)}/${y}`).join(", "):"";
+    return `<li class="e${e.off?" off":""}"><div class="day"><div class="d">${day}</div><div class="mo">${mo}</div></div><div class="body">
+      <div class="t">${esc(e.n)}</div>
+      <div class="meta"><span class="tag ${e.c}">${CAT[e.c]}</span>${e.off?'<span class="tag off">Nghỉ lễ</span>':""}${e.lunar?`<span class="tag al">Dương lịch: ${solar}</span>`:""}</div>
+      ${e.note?`<p class="note">${esc(e.note)}</p>`:""}
+      <div class="links">${e.l.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join("")}</div>
+    </div></li>`}).join("")+`</ol></section>`).join("");
+  document.getElementById("list").innerHTML=html||'<p class="empty">Không có ngày nào khớp. Thử từ khóa khác hoặc chọn “Tất cả”.</p>';
+}
+document.querySelectorAll(".chip").forEach(b=>b.addEventListener("click",()=>{
+  filter=b.dataset.f;
+  document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  render();
+}));
+document.getElementById("q").addEventListener("input",render);
+renderNext();render();
+})();
+</script>
+</body>
+</html>
