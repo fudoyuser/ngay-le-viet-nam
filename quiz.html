@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiz Ngày Lễ Việt Nam</title>
+<meta name="description" content="Quiz ôn tập ngày lễ quốc tế, Việt Nam và ngày truyền thống cơ quan nhà nước.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif+Display:wght@600;800&display=swap">
+<style>
+/* Layout: một tờ lịch ở giữa — câu hỏi trên, 4 đáp án xếp lưới, thanh tiến độ mảnh ở đầu */
+:root{
+  --paper:#fbfaf7; --sheet:#ffffff; --ink:#1d1f24; --muted:#5f6470; --rule:#e4e1da;
+  --red:#c8102e; --red-soft:#fbe9ec; --gold:#9a6b00; --gold-soft:#f8efd9; --blue:#1f5fa8; --blue-soft:#e6eef8;
+  --ok:#1f7a45; --ok-soft:#e3f3e9;
+  --display:"Noto Serif Display","Noto Serif",Georgia,serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15161a; --sheet:#1d1f24; --ink:#ecebe7; --muted:#a3a7b1; --rule:#30333a;
+  --red:#ff5a6e; --red-soft:#3a1d22; --gold:#e0b552; --gold-soft:#332a16; --blue:#7fb0ec; --blue-soft:#1b2a3d;
+  --ok:#5fd08e; --ok-soft:#173326; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#15161a; --sheet:#1d1f24; --ink:#ecebe7; --muted:#a3a7b1; --rule:#30333a;
+  --red:#ff5a6e; --red-soft:#3a1d22; --gold:#e0b552; --gold-soft:#332a16; --blue:#7fb0ec; --blue-soft:#1b2a3d;
+  --ok:#5fd08e; --ok-soft:#173326; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;margin:0}
+.wrap{max-width:680px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 56px}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:14px}
+nav a{color:var(--blue);text-decoration:none}
+nav a:hover{text-decoration:underline}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.15;margin:18px 0 6px;text-wrap:balance}
+h1 span{color:var(--red)}
+.lead{color:var(--muted);margin:0 0 20px;max-width:60ch}
+.card{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:20px}
+.lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0 0 8px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{font:inherit;font-size:14px;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:6px 12px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn{font:inherit;font-weight:600;font-size:15px;border:0;background:var(--red);color:#fff;padding:11px 20px;border-radius:8px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--rule)}
+.btn:disabled{opacity:.45;cursor:default}
+button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.best{font-size:14px;color:var(--muted);margin-top:12px}
+
+.prog{height:4px;background:var(--rule);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.prog i{display:block;height:100%;background:var(--red);transition:width .25s}
+.top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:10px}
+.tag{font-size:11.5px;font-weight:600;letter-spacing:.03em;padding:2px 8px;border-radius:4px}
+.tag.qt{background:var(--blue-soft);color:var(--blue)}
+.tag.vn{background:var(--red-soft);color:var(--red)}
+.tag.cq{background:var(--gold-soft);color:var(--gold)}
+.q{font-size:19px;font-weight:600;line-height:1.4;margin:10px 0 16px;text-wrap:balance}
+.q .big{display:block;font-family:var(--display);font-weight:800;font-size:44px;line-height:1.05;color:var(--red);margin-bottom:6px;font-variant-numeric:tabular-nums}
+.opts{display:grid;grid-template-columns:1fr;gap:8px}
+.opt{font:inherit;text-align:left;border:1px solid var(--rule);background:var(--paper);color:var(--ink);padding:12px 14px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;min-width:0}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt b{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600;flex:none}
+.opt.ok{background:var(--ok-soft);border-color:var(--ok);color:var(--ink)}
+.opt.ok b{color:var(--ok)}
+.opt.bad{background:var(--red-soft);border-color:var(--red)}
+.opt.bad b{color:var(--red)}
+.opt:disabled{cursor:default}
+.fb{margin-top:14px;padding:12px 14px;border-radius:8px;background:var(--paper);border:1px solid var(--rule);font-size:14px}
+.fb strong{display:block;margin-bottom:2px}
+.fb .y{color:var(--ok)} .fb .n{color:var(--red)}
+.fb a{color:var(--blue);margin-right:12px;overflow-wrap:anywhere}
+.next{display:flex;justify-content:flex-end;margin-top:14px}
+
+.score{font-family:var(--display);font-weight:800;font-size:64px;line-height:1;color:var(--red);font-variant-numeric:tabular-nums}
+.score small{font-size:28px;color:var(--muted)}
+.verdict{font-size:17px;font-weight:600;margin:8px 0 16px}
+.review{list-style:none;padding:0;margin:16px 0 0;display:grid;gap:10px}
+.review li{border-top:1px solid var(--rule);padding-top:10px;font-size:14px}
+.review .rq{font-weight:600}
+.review .ra{color:var(--muted)}
+.review .ra em{color:var(--ok);font-style:normal;font-weight:600}
+.review .ra s{color:var(--red)}
+.acts{display:flex;flex-wrap:wrap;gap:10px}
+@media (prefers-reduced-motion: reduce){.prog i{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav><a href="./">← Lịch ngày lễ</a><span id="kbd" style="color:var(--muted);font-size:13px">Phím 1–4 để chọn, Enter để tiếp</span></nav>
+  <h1>Quiz <span>ngày lễ</span></h1>
+  <p class="lead">Ôn tập ngày lễ quốc tế, ngày lễ Việt Nam và ngày truyền thống các bộ, ngành. Mỗi câu có 4 đáp án; trả lời xong sẽ thấy link nguồn để đọc thêm.</p>
+
+  <div class="card" id="setup">
+    <p class="lbl">Chủ đề</p>
+    <div class="row" id="cats">
+      <button class="chip" type="button" id="c-all" data-c="all" aria-pressed="true">Tất cả</button>
+      <button class="chip" type="button" id="c-qt" data-c="qt" aria-pressed="false">Quốc tế</button>
+      <button class="chip" type="button" id="c-vn" data-c="vn" aria-pressed="false">Việt Nam</button>
+      <button class="chip" type="button" id="c-cq" data-c="cq" aria-pressed="false">Cơ quan nhà nước</button>
+    </div>
+    <p class="lbl">Số câu</p>
+    <div class="row" id="nums">
+      <button class="chip" type="button" id="n-10" data-n="10" aria-pressed="true">10</button>
+      <button class="chip" type="button" id="n-20" data-n="20" aria-pressed="false">20</button>
+      <button class="chip" type="button" id="n-40" data-n="40" aria-pressed="false">40</button>
+    </div>
+    <button class="btn" type="button" id="start">Bắt đầu</button>
+    <div class="best" id="best"></div>
+  </div>
+
+  <div class="card" id="play" hidden></div>
+  <div class="card" id="done" hidden></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+const ALL=window.HOLIDAYS;
+const CAT={qt:"Quốc tế",vn:"Việt Nam",cq:"Cơ quan nhà nước"};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=(a,n)=>shuffle(a).slice(0,n);
+
+/* Chuẩn hóa: ngày hiển thị, tên bỏ năm, năm sự kiện */
+const H=ALL.map((e,i)=>{
+  const date=e.lunar?`${e.lunar[1]}/${e.lunar[0]} âm lịch`:`${+e.d.slice(3)}/${+e.d.slice(0,2)}`;
+  const m=e.n.match(/\((\d{4})\)/);
+  return {...e,id:i,date,year:m?+m[1]:null,bare:e.n.replace(/\s*\(\d{4}\)/,"").trim()};
+});
+
+/* Sinh câu hỏi */
+function qName(e,pool){ // "Ngày 20/11 là ngày gì?"
+  const others=pool.filter(x=>x.date!==e.date&&x.bare!==e.bare);
+  const same=others.filter(x=>x.c===e.c);
+  const wrong=pick(same.length>=3?same:others,3);
+  return {e,kind:"name",prompt:`<span class="big">${esc(e.date)}</span>là ngày gì?`,
+    opts:shuffle([e.bare,...wrong.map(x=>x.bare)]),ans:e.bare};
+}
+function qDate(e,pool){ // "Ngày Nhà giáo VN là ngày nào?"
+  const dates=[...new Set(pool.filter(x=>x.date!==e.date&&!!x.lunar===!!e.lunar).map(x=>x.date))];
+  let wrong=pick(dates,3);
+  if(wrong.length<3){ // âm lịch ít mục: tạo ngày giả hợp lệ
+    while(wrong.length<3){const f=`${1+Math.floor(Math.random()*28)}/${1+Math.floor(Math.random()*12)}${e.lunar?" âm lịch":""}`;if(f!==e.date&&!wrong.includes(f))wrong.push(f)}
+  }
+  return {e,kind:"date",prompt:`<em style="font-style:normal;color:var(--red)">${esc(e.bare)}</em> là ngày nào?`,
+    opts:shuffle([e.date,...wrong]),ans:e.date};
+}
+function qYear(e){ // "... thành lập năm nào?"
+  const set=new Set([e.year]);
+  const deltas=shuffle([-15,-11,-9,-5,-4,-3,-2,-1,1,2,3,4,5,9,11,15]);
+  for(const d of deltas){if(set.size>=4)break;const y=e.year+d;if(y<=new Date().getFullYear())set.add(y)}
+  return {e,kind:"year",prompt:`<em style="font-style:normal;color:var(--red)">${esc(e.bare)}</em> (${esc(e.date)}) gắn với sự kiện năm nào?`,
+    opts:shuffle([...set].map(String)),ans:String(e.year)};
+}
+function build(cat,n){
+  const pool=cat==="all"?H:H.filter(x=>x.c===cat);
+  const items=pick(pool,Math.min(n,pool.length));
+  while(items.length<n) items.push(...pick(pool,Math.min(n-items.length,pool.length)));
+  return items.map(e=>{
+    const kinds=["name","date"]; if(e.year) kinds.push("year");
+    const k=kinds[Math.floor(Math.random()*kinds.length)];
+    return k==="name"?qName(e,H):k==="date"?qDate(e,H):qYear(e);
+  });
+}
+
+/* Trạng thái */
+let cat="all",num=10,Q=[],idx=0,score=0,answered=false,log=[];
+const bestKey="quiz-ngay-le-best";
+function readBest(){try{return JSON.parse(localStorage.getItem(bestKey)||"{}")}catch(e){return {}}}
+function saveBest(k,v){try{const b=readBest();if(!b[k]||v>b[k]){b[k]=v;localStorage.setItem(bestKey,JSON.stringify(b))}}catch(e){}}
+function showBest(){const b=readBest()[cat+"-"+num];$("best").textContent=b!=null?`Điểm cao nhất (${cat==="all"?"Tất cả":CAT[cat]}, ${num} câu): ${b}%`:""}
+
+function chips(rowId,attr,set){
+  document.querySelectorAll(`#${rowId} .chip`).forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(`#${rowId} .chip`).forEach(x=>x.setAttribute("aria-pressed",x===b));
+    set(b.dataset[attr]);showBest();
+  }));
+}
+chips("cats","c",v=>cat=v);
+chips("nums","n",v=>num=+v);
+showBest();
+
+function start(){
+  Q=build(cat,num);idx=0;score=0;log=[];
+  $("setup").hidden=true;$("done").hidden=true;$("play").hidden=false;
+  render();
+}
+function render(){
+  answered=false;
+  const q=Q[idx];
+  $("play").innerHTML=`
+    <div class="prog"><i style="width:${idx/Q.length*100}%"></i></div>
+    <div class="top"><span>Câu ${idx+1}/${Q.length}</span><span>Đúng: ${score}</span></div>
+    <span class="tag ${q.e.c}">${CAT[q.e.c]}</span>
+    <p class="q">${q.prompt}</p>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" type="button" id="o${i}" data-v="${esc(o)}"><b>${i+1}</b><span>${esc(o)}</span></button>`).join("")}</div>
+    <div id="fb"></div>`;
+  document.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>answer(b)));
+  $("o0").focus({preventScroll:true});
+}
+function answer(btn){
+  if(answered)return; answered=true;
+  const q=Q[idx], v=btn.dataset.v, right=v===q.ans;
+  if(right)score++;
+  log.push({q,v,right});
+  document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.v===q.ans)b.classList.add("ok");else if(b===btn)b.classList.add("bad")});
+  const e=q.e;
+  const fact=`${e.n} — ${e.date}${e.lunar&&e.solar?" (dương lịch: "+Object.entries(e.solar).map(([y,s])=>`${+s.slice(3)}/${+s.slice(0,2)}/${y}`).join(", ")+")":""}.`;
+  $("fb").innerHTML=`<div class="fb"><strong class="${right?"y":"n"}">${right?"Chính xác!":"Chưa đúng. Đáp án: "+esc(q.ans)}</strong>${esc(fact)}${e.note?" "+esc(e.note):""}
+    <div style="margin-top:6px">${e.l.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join("")}</div></div>
+    <div class="next"><button class="btn" type="button" id="nx">${idx+1<Q.length?"Câu tiếp":"Xem kết quả"}</button></div>`;
+  $("nx").addEventListener("click",next);$("nx").focus({preventScroll:true});
+}
+function next(){idx++; idx<Q.length?render():finish()}
+function finish(){
+  $("play").hidden=true;$("done").hidden=false;
+  const pct=Math.round(score/Q.length*100);
+  saveBest(cat+"-"+num,pct);
+  const verdict=pct===100?"Tuyệt đối! Bạn thuộc lịch như lòng bàn tay.":pct>=80?"Rất tốt, chỉ còn vài ngày cần nhớ.":pct>=50?"Khá ổn. Xem lại các câu sai bên dưới nhé.":"Cần ôn thêm. Mở lịch ngày lễ để xem lại rồi thử lần nữa.";
+  const wrong=log.filter(x=>!x.right);
+  $("done").innerHTML=`<p class="lbl">Kết quả</p>
+    <div class="score">${score}<small>/${Q.length}</small></div>
+    <p class="verdict">${verdict}</p>
+    <div class="acts"><button class="btn" type="button" id="again">Làm lại</button><button class="btn ghost" type="button" id="cfg">Đổi chủ đề</button><a class="btn ghost" href="./" style="text-decoration:none">Xem lịch ngày lễ</a></div>
+    ${wrong.length?`<p class="lbl" style="margin-top:22px">Câu trả lời sai (${wrong.length})</p><ul class="review">${wrong.map(({q,v})=>`<li><div class="rq">${q.prompt.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim()}</div><div class="ra">Bạn chọn <s>${esc(v)}</s> · Đáp án <em>${esc(q.ans)}</em></div></li>`).join("")}</ul>`:""}`;
+  $("again").addEventListener("click",start);
+  $("cfg").addEventListener("click",()=>{$("done").hidden=true;$("setup").hidden=false;showBest()});
+  $("again").focus({preventScroll:true});
+}
+$("start").addEventListener("click",start);
+
+document.addEventListener("keydown",ev=>{
+  if($("play").hidden)return;
+  if(!answered&&/^[1-4]$/.test(ev.key)){const b=$("o"+(+ev.key-1));if(b)b.click();}
+  else if(answered&&ev.key==="Enter"&&document.activeElement?.id!=="nx"){$("nx")?.click();}
+});
+})();
+</script>
+</body>
+</html>
