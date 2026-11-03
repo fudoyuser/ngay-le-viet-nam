@@ -101,6 +101,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offse
       <button class="chip" type="button" id="n-10" data-n="10" aria-pressed="true">10</button>
       <button class="chip" type="button" id="n-20" data-n="20" aria-pressed="false">20</button>
       <button class="chip" type="button" id="n-40" data-n="40" aria-pressed="false">40</button>
+      <button class="chip" type="button" id="n-all" data-n="all" aria-pressed="false">Ôn tất cả</button>
     </div>
     <button class="btn" type="button" id="start">Bắt đầu</button>
     <div class="best" id="best"></div>
@@ -151,8 +152,10 @@ function qYear(e){ // "... thành lập năm nào?"
   return {e,kind:"year",prompt:`<em style="font-style:normal;color:var(--red)">${esc(e.bare)}</em> (${esc(e.date)}) gắn với sự kiện năm nào?`,
     opts:shuffle([...set].map(String)),ans:String(e.year)};
 }
+const poolOf=c=>c==="all"?H:H.filter(x=>x.c===c);
 function build(cat,n){
-  const pool=cat==="all"?H:H.filter(x=>x.c===cat);
+  const pool=poolOf(cat);
+  if(n==="all") n=pool.length; // mỗi ngày lễ hỏi đúng 1 lần
   const items=pick(pool,Math.min(n,pool.length));
   while(items.length<n) items.push(...pick(pool,Math.min(n-items.length,pool.length)));
   return items.map(e=>{
@@ -167,7 +170,7 @@ let cat="all",num=10,Q=[],idx=0,score=0,answered=false,log=[];
 const bestKey="quiz-ngay-le-best";
 function readBest(){try{return JSON.parse(localStorage.getItem(bestKey)||"{}")}catch(e){return {}}}
 function saveBest(k,v){try{const b=readBest();if(!b[k]||v>b[k]){b[k]=v;localStorage.setItem(bestKey,JSON.stringify(b))}}catch(e){}}
-function showBest(){const b=readBest()[cat+"-"+num];$("best").textContent=b!=null?`Điểm cao nhất (${cat==="all"?"Tất cả":CAT[cat]}, ${num} câu): ${b}%`:""}
+function showBest(){const b=readBest()[cat+"-"+num];$("best").textContent=b!=null?`Điểm cao nhất (${cat==="all"?"Tất cả":CAT[cat]}, ${num==="all"?"ôn tất cả":num+" câu"}): ${b}%`:""}
 
 function chips(rowId,attr,set){
   document.querySelectorAll(`#${rowId} .chip`).forEach(b=>b.addEventListener("click",()=>{
@@ -176,8 +179,10 @@ function chips(rowId,attr,set){
   }));
 }
 chips("cats","c",v=>cat=v);
-chips("nums","n",v=>num=+v);
-showBest();
+chips("nums","n",v=>num=v==="all"?"all":+v);
+function allLabel(){$("n-all").textContent=`Ôn tất cả (${poolOf(cat).length} câu)`}
+document.querySelectorAll("#cats .chip").forEach(b=>b.addEventListener("click",allLabel));
+allLabel();showBest();
 
 function start(){
   Q=build(cat,num);idx=0;score=0;log=[];

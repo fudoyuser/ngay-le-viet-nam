@@ -13,7 +13,7 @@ Mở `index.html` trực tiếp, hoặc bật GitHub Pages (Settings → Pages �
 `quiz.html`: quiz trắc nghiệm 4 đáp án, câu hỏi sinh ngẫu nhiên từ `data.js`.
 
 - 3 dạng câu: "Ngày X là ngày gì?", "Ngày Y là ngày nào?", "Gắn với sự kiện năm nào?"
-- Chọn chủ đề (Quốc tế / Việt Nam / Cơ quan nhà nước) và số câu (10 / 20 / 40)
+- Chọn chủ đề (Quốc tế / Việt Nam / Cơ quan nhà nước) và số câu (10 / 20 / 40, hoặc "Ôn tất cả" để hỏi mỗi ngày lễ đúng 1 lần)
 - Trả lời xong có giải thích và link nguồn; cuối bài xem lại các câu sai
 - Lưu điểm cao nhất trên trình duyệt; dùng phím 1–4 và Enter
 
